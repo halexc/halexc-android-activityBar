@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#202020"
+    tools:context="com.example.radialprogress.MainActivity">
+
+    <com.example.radialprogress.RadialProgressBar
+        android:id="@+id/radialProgressBar"
+        android:layout_width="256dp"
+        android:layout_height="256dp"
+        android:visibility="visible"
+        app:circleWidth=".2"
+        app:colorBackground="#4020C020"
+        app:colorEnd="#C00000"
+        app:colorQ1="#20C020"
+        app:colorQ2="#20C020"
+        app:colorQ3="#D5FA00"
+        app:colorStart="#18FF18"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.187"
+        app:progressInitial="421"
+        app:progressMaximum="1000" />
+
+    <com.example.radialprogress.RadialProgressBar
+        android:id="@+id/radialProgressBar2"
+        android:layout_width="192dp"
+        android:layout_height="192dp"
+        app:circleWidth=".27"
+        app:colorBackground="#40C000FF"
+        app:colorEnd="#64009B"
+        app:colorQ1="#FF0000"
+        app:colorQ2="#FFD900"
+        app:colorQ3="#0025E2"
+        app:colorStart="#C000FF"
+        app:layout_constraintBottom_toBottomOf="@+id/radialProgressBar"
+        app:layout_constraintEnd_toEndOf="@+id/radialProgressBar"
+        app:layout_constraintStart_toStartOf="@+id/radialProgressBar"
+        app:layout_constraintTop_toTopOf="@+id/radialProgressBar"
+        app:progressInitial="421"
+        app:progressMaximum="1000" />
+
+    <com.example.radialprogress.RadialProgressBar
+        android:id="@+id/radialProgressBar3"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        app:circleWidth=".4"
+        app:colorBackground="#404080FF"
+        app:colorEnd="#0000FF"
+        app:colorStart="#4080FF"
+        app:layout_constraintBottom_toBottomOf="@+id/radialProgressBar"
+        app:layout_constraintEnd_toEndOf="@+id/radialProgressBar"
+        app:layout_constraintStart_toStartOf="@+id/radialProgressBar"
+        app:layout_constraintTop_toTopOf="@+id/radialProgressBar"
+        app:progressInitial="421"
+        app:progressMaximum="1000" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        style="@style/Widget.AppCompat.SeekBar"
+        android:layout_width="316dp"
+        android:layout_height="40dp"
+        android:max="1500"
+        android:progress="421"
+        android:progressTint="#2B2B2B"
+        android:thumbTint="#00FFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radialProgressBar" />
+
+    <SeekBar
+        android:id="@+id/seekBar2"
+        style="@style/Widget.AppCompat.SeekBar"
+        android:layout_width="316dp"
+        android:layout_height="40dp"
+        android:max="1500"
+        android:progress="421"
+        android:progressTint="#2B2B2B"
+        android:thumbTint="#00FFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:layout_constraintVertical_bias="0.097" />
+
+    <SeekBar
+        android:id="@+id/seekBar3"
+        style="@style/Widget.AppCompat.SeekBar"
+        android:layout_width="316dp"
+        android:layout_height="40dp"
+        android:max="1500"
+        android:progress="421"
+        android:progressTint="#2B2B2B"
+        android:thumbTint="#00FFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar2"
+        app:layout_constraintVertical_bias="0.162" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

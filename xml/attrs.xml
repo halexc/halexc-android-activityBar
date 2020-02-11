@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <declare-styleable name="RadialProgressBar">
+        <attr name="colorStart" format="color"/>
+        <attr name="colorQ1"   format="color"/>
+        <attr name="colorQ2"   format="color"/>
+        <attr name="colorQ3"   format="color"/>
+        <attr name="colorEnd"   format="color"/>
+        <attr name="colorBackground" format="color"/>
+        <attr name="progressMaximum" format="integer"/>
+        <attr name="progressInitial" format="integer"/>
+        <attr name="circleWidth" format="float"/>
+        <attr name="CW" format="boolean"/>
+    </declare-styleable>
+</resources>
