@@ -129,10 +129,14 @@ class RadialProgressBar @JvmOverloads constructor(context: Context, attrs: Attri
         val p = 360f * progress.toFloat()/maximum
         val cx = xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness/2), -90f + dir * p)
         val cy = yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness/2), -90f + dir * p)
+        
+        // First quarter
         pathProgress.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f, dir * min(p, 90f))
         pathProgress.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * min(p, 90f)),
             yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness), -90 + dir * min(p, 90f)))
         if(p <= 90){
+            // Is progress less than a quarter of maximum progress? If it
+            // is, then finish off the this quarter with a semicircle.
             pathProgress.addArc(cx - measuredWidth/2 * thickness/2, cy - measuredHeight/2 * thickness/2,
                 cx + measuredWidth/2 * thickness/2, cy + measuredHeight/2 * thickness/2,
                 -90f + dir * p, dir * 180f)
@@ -144,11 +148,15 @@ class RadialProgressBar @JvmOverloads constructor(context: Context, attrs: Attri
         pathProgress.addArc(measuredWidth/2 * (1-thickness/2), 0f,
             measuredWidth/2 * (1+thickness/2), measuredHeight/2 * thickness,
             -90f, -dir * 180f)
+        
+        // Second quarter
         if (p > 90){
             pathProgressQ2.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f + dir * 90, dir * min(p - 90, 90f))
             pathProgressQ2.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * min(p, 180f)),
                 yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness), -90 + dir * min(p, 180f)))
             if(p <= 180){
+                // Is progress less than two quarters of maximum progress? If it
+                // is, then finish off the this quarter with a semicircle.
                 pathProgressQ2.addArc(cx - measuredWidth/2 * thickness/2, cy - measuredHeight/2 * thickness/2,
                     cx + measuredWidth/2 * thickness/2, cy + measuredHeight/2 * thickness/2,
                     -90f + dir * p, dir * 180f)
@@ -157,11 +165,15 @@ class RadialProgressBar @JvmOverloads constructor(context: Context, attrs: Attri
                 measuredWidth.toFloat() - measuredWidth/2f * thickness, measuredHeight.toFloat() - measuredHeight/2f * thickness,
                 -90f + dir * min(p, 180f), -dir * min(p-90, 90f))
             pathProgressQ2.lineTo(measuredWidth.toFloat() * (1+dir)/2, measuredHeight.toFloat()/2f)
+            
+            // Third quarter
             if (p > 180){
                 pathProgressQ3.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f + dir * 180, dir * min(p - 180, 90f))
                 pathProgressQ3.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * min(p, 270f)),
                     yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness), -90 + dir * min(p, 270f)))
                 if(p <= 270){
+                    // Is progress less than two quarters of maximum progress? If it
+                    // is, then finish off the this quarter with a semicircle.
                     pathProgressQ3.addArc(cx - measuredWidth/2 * thickness/2, cy - measuredHeight/2 * thickness/2,
                         cx + measuredWidth/2 * thickness/2, cy + measuredHeight/2 * thickness/2,
                         -90f + dir * p, dir * 180f)
@@ -170,11 +182,15 @@ class RadialProgressBar @JvmOverloads constructor(context: Context, attrs: Attri
                     measuredWidth.toFloat() - measuredWidth/2f * thickness, measuredHeight.toFloat() - measuredHeight/2f * thickness,
                     -90f + dir * min(p, 270f), -dir * min(p-180, 90f))
                 pathProgressQ3.lineTo(measuredWidth.toFloat()/2f, measuredHeight.toFloat())
+                
+                // Fourth quarter
                 if (p > 270){
                     pathProgressQ4.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f + dir * 270, dir * min(p - 270, 90f))
                     pathProgressQ4.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * min(p, 360f)),
                         yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness), -90 + dir * min(p, 360f)))
                     if(p <= 360){
+                        // Does the progress exceed the maximum progress? If it doesn't, 
+                        // then finish off the this quarter with a semicircle.
                         pathProgressQ4.addArc(cx - measuredWidth/2 * thickness/2, cy - measuredHeight/2 * thickness/2,
                             cx + measuredWidth/2 * thickness/2, cy + measuredHeight/2 * thickness/2,
                             -90f + dir * p, dir * 180f)
@@ -183,6 +199,10 @@ class RadialProgressBar @JvmOverloads constructor(context: Context, attrs: Attri
                         measuredWidth.toFloat() - measuredWidth/2f * thickness, measuredHeight.toFloat() - measuredHeight/2f * thickness,
                         -90f + dir * min(p, 360f), -dir * min(p-270, 90f))
                     pathProgressQ4.lineTo(measuredWidth.toFloat() * (1-dir)/2, measuredHeight.toFloat()/2f)
+                    
+                    // Overrun. If the progress exceeds the maximum progress,
+                    // add the corresponding path. This path is finished with
+                    // a semicircle.
                     if (p > 360) {
                         pathOverrun.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f, dir * (p-360))
                         pathOverrun.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * (p-360)),
