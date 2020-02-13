@@ -127,75 +127,16 @@ class RadialProgressBar @JvmOverloads constructor(context: Context, attrs: Attri
         // ing the inner and outer arc is added for a nicer finish. In case of overrunning, this
         // semicircle is always drawn.
         val p = 360f * progress.toFloat()/maximum
-        val cx = xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness/2), -90f + dir * p)
-        val cy = yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness/2), -90f + dir * p)
-        pathProgress.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f, dir * min(p, 90f))
-        pathProgress.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * min(p, 90f)),
-            yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness), -90 + dir * min(p, 90f)))
-        if(p <= 90){
-            pathProgress.addArc(cx - measuredWidth/2 * thickness/2, cy - measuredHeight/2 * thickness/2,
-                cx + measuredWidth/2 * thickness/2, cy + measuredHeight/2 * thickness/2,
-                -90f + dir * p, dir * 180f)
-        }
-        pathProgress.addArc(0f + measuredWidth/2f * thickness, 0f + measuredHeight/2f * thickness,
-                            measuredWidth.toFloat() - measuredWidth/2f * thickness, measuredHeight.toFloat() - measuredHeight/2f * thickness,
-                         -90f + dir * min(p, 90f), -dir * min(p, 90f))
-        pathProgress.lineTo(measuredWidth/2f, 0f)
-        pathProgress.addArc(measuredWidth/2 * (1-thickness/2), 0f,
-            measuredWidth/2 * (1+thickness/2), measuredHeight/2 * thickness,
-            -90f, -dir * 180f)
+
+        makePathsQuarter(pathProgress, thickness, p, 0f, dir)
         if (p > 90){
-            pathProgressQ2.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f + dir * 90, dir * min(p - 90, 90f))
-            pathProgressQ2.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * min(p, 180f)),
-                yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness), -90 + dir * min(p, 180f)))
-            if(p <= 180){
-                pathProgressQ2.addArc(cx - measuredWidth/2 * thickness/2, cy - measuredHeight/2 * thickness/2,
-                    cx + measuredWidth/2 * thickness/2, cy + measuredHeight/2 * thickness/2,
-                    -90f + dir * p, dir * 180f)
-            }
-            pathProgressQ2.addArc(0f + measuredWidth/2f * thickness, 0f + measuredHeight/2f * thickness,
-                measuredWidth.toFloat() - measuredWidth/2f * thickness, measuredHeight.toFloat() - measuredHeight/2f * thickness,
-                -90f + dir * min(p, 180f), -dir * min(p-90, 90f))
-            pathProgressQ2.lineTo(measuredWidth.toFloat() * (1+dir)/2, measuredHeight.toFloat()/2f)
+            makePathsQuarter(pathProgressQ2, thickness, p, 90f, dir)
             if (p > 180){
-                pathProgressQ3.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f + dir * 180, dir * min(p - 180, 90f))
-                pathProgressQ3.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * min(p, 270f)),
-                    yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness), -90 + dir * min(p, 270f)))
-                if(p <= 270){
-                    pathProgressQ3.addArc(cx - measuredWidth/2 * thickness/2, cy - measuredHeight/2 * thickness/2,
-                        cx + measuredWidth/2 * thickness/2, cy + measuredHeight/2 * thickness/2,
-                        -90f + dir * p, dir * 180f)
-                }
-                pathProgressQ3.addArc(0f + measuredWidth/2f * thickness, 0f + measuredHeight/2f * thickness,
-                    measuredWidth.toFloat() - measuredWidth/2f * thickness, measuredHeight.toFloat() - measuredHeight/2f * thickness,
-                    -90f + dir * min(p, 270f), -dir * min(p-180, 90f))
-                pathProgressQ3.lineTo(measuredWidth.toFloat()/2f, measuredHeight.toFloat())
+                makePathsQuarter(pathProgressQ3, thickness, p, 180f, dir)
                 if (p > 270){
-                    pathProgressQ4.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f + dir * 270, dir * min(p - 270, 90f))
-                    pathProgressQ4.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * min(p, 360f)),
-                        yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness), -90 + dir * min(p, 360f)))
-                    if(p <= 360){
-                        pathProgressQ4.addArc(cx - measuredWidth/2 * thickness/2, cy - measuredHeight/2 * thickness/2,
-                            cx + measuredWidth/2 * thickness/2, cy + measuredHeight/2 * thickness/2,
-                            -90f + dir * p, dir * 180f)
-                    }
-                    pathProgressQ4.addArc(0f + measuredWidth/2f * thickness, 0f + measuredHeight/2f * thickness,
-                        measuredWidth.toFloat() - measuredWidth/2f * thickness, measuredHeight.toFloat() - measuredHeight/2f * thickness,
-                        -90f + dir * min(p, 360f), -dir * min(p-270, 90f))
-                    pathProgressQ4.lineTo(measuredWidth.toFloat() * (1-dir)/2, measuredHeight.toFloat()/2f)
+                    makePathsQuarter(pathProgressQ4, thickness, p, 270f, dir)
                     if (p > 360) {
-                        pathOverrun.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f, dir * (p-360))
-                        pathOverrun.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * (p-360)),
-                            yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness), -90 + dir * (p-360)))
-
-                        pathOverrun.addArc(cx - measuredWidth/2 * thickness/2, cy - measuredHeight/2 * thickness/2,
-                            cx + measuredWidth/2 * thickness/2, cy + measuredHeight/2 * thickness/2,
-                            -90f + dir * p, dir * 180f)
-
-                        pathOverrun.addArc(0f + measuredWidth/2f * thickness, 0f + measuredHeight/2f * thickness,
-                            measuredWidth.toFloat() - measuredWidth/2f * thickness, measuredHeight.toFloat() - measuredHeight/2f * thickness,
-                            -90f + dir * (p-360), -dir * (p-360))
-                        pathOverrun.lineTo(measuredWidth/2f, 0f)
+                        makePathOverrun(pathOverrun, thickness, p, dir)
                     }
                 }
             }
@@ -204,31 +145,82 @@ class RadialProgressBar @JvmOverloads constructor(context: Context, attrs: Attri
 
         // If the shaders have not yet been set up, do so
         if (!init){
-            //paintPathQ1.shader = LinearGradient(0f,0f,measuredWidth.toFloat(), measuredHeight.toFloat(), colorStart, colorEnd, Shader.TileMode.REPEAT)
-            if (dir > 0) {
-                paintPathQ1.shader = LinearGradient(measuredWidth.toFloat()/2, measuredHeight.toFloat() * (thickness/2f), measuredWidth.toFloat() * (1-thickness/2f), measuredHeight.toFloat()/2, colorStart, colorQ1, Shader.TileMode.CLAMP)
-                paintPathQ2.shader = LinearGradient(measuredWidth.toFloat() * (1-thickness/2f), measuredHeight.toFloat()/2, measuredWidth.toFloat()/2, measuredHeight.toFloat() * (1-thickness/2f), colorQ1, colorQ2, Shader.TileMode.CLAMP)
-                paintPathQ3.shader = LinearGradient(measuredWidth.toFloat()/2, measuredHeight.toFloat() * (1-thickness/2f), measuredWidth.toFloat() * (thickness/2f), measuredHeight.toFloat()/2, colorQ2, colorQ3, Shader.TileMode.CLAMP)
-                paintPathQ4.shader = LinearGradient(measuredWidth.toFloat() * (thickness/2f), measuredHeight.toFloat()/2, measuredWidth.toFloat()/2, measuredHeight.toFloat() * (thickness/2f), colorQ3, colorEnd, Shader.TileMode.CLAMP)
-            } else {
-                paintPathQ1.shader = LinearGradient(measuredWidth.toFloat()/2, measuredHeight.toFloat() * (thickness/2f), measuredWidth.toFloat() * (thickness/2f), measuredHeight.toFloat()/2, colorStart, colorQ1, Shader.TileMode.CLAMP)
-                paintPathQ2.shader = LinearGradient(measuredWidth.toFloat() * (thickness/2f), measuredHeight.toFloat()/2, measuredWidth.toFloat()/2, measuredHeight.toFloat() * (1-thickness/2f), colorQ1, colorQ2, Shader.TileMode.CLAMP)
-                paintPathQ3.shader = LinearGradient(measuredWidth.toFloat()/2, measuredHeight.toFloat() * (1-thickness/2f), measuredWidth.toFloat() * (1-thickness/2f), measuredHeight.toFloat()/2, colorQ2, colorQ3, Shader.TileMode.CLAMP)
-                paintPathQ4.shader = LinearGradient(measuredWidth.toFloat() * (1-thickness/2f), measuredHeight.toFloat()/2, measuredWidth.toFloat()/2, measuredHeight.toFloat() * (thickness/2f), colorQ3, colorEnd, Shader.TileMode.CLAMP)
-            }
-
-            pathBackground.reset()
-            pathBackground.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), 0f, 360f)
-            pathBackground.lineTo(measuredWidth.toFloat() * (1-thickness/2), measuredHeight.toFloat()/2)
-            pathBackground.addArc(measuredWidth * thickness/2, measuredHeight * thickness/2,
-                measuredWidth * (1-thickness/2), measuredHeight * (1-thickness/2), 0f, -360f)
-            pathBackground.lineTo(measuredWidth.toFloat()/2, measuredHeight.toFloat())
-
+            initShaders()
             init = true
         }
 
 
 
+    }
+    private fun initShaders(){
+        if (dir > 0) {
+            paintPathQ1.shader = LinearGradient(measuredWidth.toFloat()/2, measuredHeight.toFloat() * (thickness/2f), measuredWidth.toFloat() * (1-thickness/2f), measuredHeight.toFloat()/2, colorStart, colorQ1, Shader.TileMode.CLAMP)
+            paintPathQ2.shader = LinearGradient(measuredWidth.toFloat() * (1-thickness/2f), measuredHeight.toFloat()/2, measuredWidth.toFloat()/2, measuredHeight.toFloat() * (1-thickness/2f), colorQ1, colorQ2, Shader.TileMode.CLAMP)
+            paintPathQ3.shader = LinearGradient(measuredWidth.toFloat()/2, measuredHeight.toFloat() * (1-thickness/2f), measuredWidth.toFloat() * (thickness/2f), measuredHeight.toFloat()/2, colorQ2, colorQ3, Shader.TileMode.CLAMP)
+            paintPathQ4.shader = LinearGradient(measuredWidth.toFloat() * (thickness/2f), measuredHeight.toFloat()/2, measuredWidth.toFloat()/2, measuredHeight.toFloat() * (thickness/2f), colorQ3, colorEnd, Shader.TileMode.CLAMP)
+        } else {
+            paintPathQ1.shader = LinearGradient(measuredWidth.toFloat()/2, measuredHeight.toFloat() * (thickness/2f), measuredWidth.toFloat() * (thickness/2f), measuredHeight.toFloat()/2, colorStart, colorQ1, Shader.TileMode.CLAMP)
+            paintPathQ2.shader = LinearGradient(measuredWidth.toFloat() * (thickness/2f), measuredHeight.toFloat()/2, measuredWidth.toFloat()/2, measuredHeight.toFloat() * (1-thickness/2f), colorQ1, colorQ2, Shader.TileMode.CLAMP)
+            paintPathQ3.shader = LinearGradient(measuredWidth.toFloat()/2, measuredHeight.toFloat() * (1-thickness/2f), measuredWidth.toFloat() * (1-thickness/2f), measuredHeight.toFloat()/2, colorQ2, colorQ3, Shader.TileMode.CLAMP)
+            paintPathQ4.shader = LinearGradient(measuredWidth.toFloat() * (1-thickness/2f), measuredHeight.toFloat()/2, measuredWidth.toFloat()/2, measuredHeight.toFloat() * (thickness/2f), colorQ3, colorEnd, Shader.TileMode.CLAMP)
+        }
+
+        pathBackground.reset()
+        pathBackground.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), 0f, 360f)
+        pathBackground.lineTo(measuredWidth.toFloat() * (1-thickness/2), measuredHeight.toFloat()/2)
+        pathBackground.addArc(measuredWidth * thickness/2, measuredHeight * thickness/2,
+            measuredWidth * (1-thickness/2), measuredHeight * (1-thickness/2), 0f, -360f)
+        pathBackground.lineTo(measuredWidth.toFloat()/2, measuredHeight.toFloat())
+    }
+    private fun makePathsQuarter(path : Path, thickness : Float, progress : Float, offset : Float, dir : Int){
+
+        //Center of finishing semicircle:
+        val cx = xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness/2), -90f + dir * progress)
+        val cy = yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness/2), -90f + dir * progress)
+
+        //Outer arc
+        path.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f + dir * offset, dir * min(progress - offset, 90f))
+        path.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * min(progress, offset + 90f)),
+            yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness), -90 + dir * min(progress, offset + 90f)))
+        if(progress <= offset + 90f){
+            path.addArc(cx - measuredWidth/2 * thickness/2, cy - measuredHeight/2 * thickness/2,
+                cx + measuredWidth/2 * thickness/2, cy + measuredHeight/2 * thickness/2,
+                -90f + dir * progress, dir * 180f)
+        }
+        //Inner arc
+        path.addArc(0f + measuredWidth/2f * thickness, 0f + measuredHeight/2f * thickness,
+            measuredWidth.toFloat() - measuredWidth/2f * thickness, measuredHeight.toFloat() - measuredHeight/2f * thickness,
+            -90f + dir * min(progress, offset + 90f), -dir * min(progress - offset, 90f))
+        path.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2f, - 90f + dir * offset),
+            yOnCircle(measuredWidth/2f, measuredWidth/2f, - 90f + dir * offset))
+
+        //If this is the first quarter, add an additional semicircle at the start:
+        if(offset.equals(0f)) {
+            path.addArc(
+                measuredWidth / 2 * (1 - thickness / 2), 0f,
+                measuredWidth / 2 * (1 + thickness / 2), measuredHeight / 2 * thickness,
+                -90f, -dir * 180f
+            )
+        }
+    }
+    private fun makePathOverrun(path : Path, thickness: Float, progress : Float, dir : Int){
+
+        //Center of finishing semicircle:
+        val cx = xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness/2), -90f + dir * progress)
+        val cy = yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness/2), -90f + dir * progress)
+
+        path.addArc(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), -90f, dir * (progress-360))
+        path.lineTo(xOnCircle(measuredWidth/2f, measuredWidth/2 * (1-thickness), -90 + dir * (progress-360)),
+            yOnCircle(measuredHeight/2f, measuredHeight/2 * (1-thickness), -90 + dir * (progress-360)))
+
+        path.addArc(cx - measuredWidth/2 * thickness/2, cy - measuredHeight/2 * thickness/2,
+            cx + measuredWidth/2 * thickness/2, cy + measuredHeight/2 * thickness/2,
+            -90f + dir * progress, dir * 180f)
+
+        path.addArc(0f + measuredWidth/2f * thickness, 0f + measuredHeight/2f * thickness,
+            measuredWidth.toFloat() - measuredWidth/2f * thickness, measuredHeight.toFloat() - measuredHeight/2f * thickness,
+            -90f + dir * (progress-360), -dir * (progress-360))
+        path.lineTo(measuredWidth/2f, 0f)
     }
 
     private fun xOnCircle(centerX: Float, r: Float, angle: Float) : Float{
